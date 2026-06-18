@@ -1,7 +1,7 @@
 ---
 created: 2026-06-18
 title: Dashboard shows WIP per station
-status: in-progress
+status: done
 area: ui
 ---
 
@@ -47,14 +47,14 @@ be presented separately, and zero-count stations being shown.
 ## Task
 
 <!-- What to do. Use sub-headings or a checklist for multi-step work. -->
-- [ ] Verify `WipByStation` counts every spool exactly once and includes all six
+- [x] Verify `WipByStation` counts every spool exactly once and includes all six
       stations (including zero counts).
-- [ ] Ensure the UI displays stations in domain order, not arbitrary dict order.
-- [ ] Decide and document whether `Installed` (terminal) belongs in the WIP view
+- [x] Ensure the UI displays stations in domain order, not arbitrary dict order.
+- [x] Decide and document whether `Installed` (terminal) belongs in the WIP view
       or should be visually separated from in-flight stations.
-- [ ] Add backend test(s) in `src/StratusFabTracker.Tests` asserting WIP counts
+- [x] Add backend test(s) in `src/StratusFabTracker.Tests` asserting WIP counts
       for a known seeded/constructed set of spools.
-- [ ] Light UI polish so counts are legible (labels + numbers); keep scope tight.
+- [x] Light UI polish so counts are legible (labels + numbers); keep scope tight.
 
 ## Expected output
 
@@ -96,11 +96,46 @@ be presented separately, and zero-count stations being shown.
 
 # ROOT CAUSE
 
-[if task is fixing a bug, report the root cause here]
+Not a bug fix. The inherited code was functionally correct but relied on
+`Dictionary<string,int>` serialization order to convey domain station order, which
+is incidental rather than guaranteed by the contract, and it presented the terminal
+`Installed` station inline with in-flight WIP.
 
 # RESOLUTION
 
-[place here the resolution of the ticket]
+**Backend** (`src/StratusFabTracker.Api/Application/DashboardService.cs`):
+- Replaced the `Dictionary<string,int> WipByStation` with an explicitly ordered
+  `IReadOnlyList<WipStationCount>` (new record `WipStationCount(string Station, int Count)`),
+  built via `Enum.GetValues<Station>().OrderBy(s => (int)s)`. Domain order
+  (Detailing → Cut → Weld → QC → Shipped → Installed) is now part of the contract,
+  not a serialization artifact.
+- Counting is unchanged in spirit: every station is emitted including zero counts,
+  and because each spool has exactly one `CurrentStation`, the counts partition the
+  spool set and sum to the total.
+
+**Installed decision**: `Installed` is the terminal station (`Station.Installed.Next()`
+is null) — those spools are no longer work-in-progress. It is **kept in the API payload**
+so the six per-station counts still sum to the spool total, but is **visually separated
+in the UI**: the "WIP per station" table lists only in-flight stations (Detailing →
+Shipped) plus an "In progress" subtotal, with Installed shown beneath as
+"Installed (complete)".
+
+**Frontend** (`src/stratus-fab-tracker-web/src/App.vue`):
+- Updated the `DashboardDto` type to the array shape; added computed
+  `inFlightStations`, `installedCount`, and `wipTotal`.
+- Rendered WIP as a small table with right-aligned, tabular-figure counts for
+  legibility; Installed and Past due shown separately below.
+
+**Tests** (`src/StratusFabTracker.Tests/DashboardServiceTests.cs`): 3 new tests
+pin (a) all six stations present in domain order, (b) each spool counted once with
+zero-count stations present and counts summing to the total, (c) empty repository
+yields six zero counts. `dotnet test` → 5 passed (2 pre-existing + 3 new).
+
+**Verified**: `GET /api/dashboard` against seed data returns the ordered array with
+counts 29/27/23/27/36/58 summing to 200 (total spools). `npm run build` succeeds.
+
+PR: https://github.com/GTP-Services/full-stack-engineer-ai-code-challenge/pull/1
+
 
 # FOLLOW UP
 
