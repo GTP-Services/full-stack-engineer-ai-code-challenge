@@ -4,8 +4,7 @@
 
 Read these before you start:
 
-- [PRIVACY_RELEASE.md](PRIVACY_RELEASE.md) — sign before running `./start.sh`
-- [INTERVIEW_RULES.md](INTERVIEW_RULES.md) — recording workflow, time-box, and setup notes
+- [INTERVIEW_RULES.md](INTERVIEW_RULES.md) — workflow, time-box, and setup notes
 - [PROCESS.md](PROCESS.md) — short write-up template to complete after the session
 - [RUBRIC_OVERVIEW.md](RUBRIC_OVERVIEW.md) — what the proctor observes
 
@@ -87,14 +86,12 @@ dotnet test
 
 You are expected to add your own tests for the transition logic and throughput behavior as part of the exercise.
 
-## Recording the session
+## Finishing the session
 
-1. Sign [PRIVACY_RELEASE.md](PRIVACY_RELEASE.md)
-2. Run `./start.sh` from the repo root — this records your terminal session
-3. Work in your normal AI-assisted workflow (Claude Code, Cursor, Codex, or any other tool)
-4. When finished, exit the recording shell and run `./end.sh`
+1. Work in your normal AI-assisted workflow (Claude Code, Cursor, Codex, or any other tool)
+2. When finished, run `./end.sh`
 
-`start.sh` and `end.sh` depend only on the terminal recording. If your AI tool supports project hooks, the repo includes optional configs under `.claude/`, `.cursor/`, and `.codex/` that may append structured events to `interview.log`. Codex users may need to trust project hooks via `/hooks` before they run.
+If your AI tool supports project hooks, the repo includes optional configs under `.claude/`, `.cursor/`, and `.codex/` that may append structured events to `interview.log`. Codex users may need to trust project hooks via `/hooks` before they run.
 
 ## Acceptance criteria
 
@@ -117,4 +114,4 @@ This overwrites `src/Data/spools.seed.json` with a deterministic ~200-spool data
 
 ## Process
 
-See [INTERVIEW_RULES.md](INTERVIEW_RULES.md) for the recording and interview workflow.
+See [INTERVIEW_RULES.md](INTERVIEW_RULES.md) for the interview workflow.
