@@ -43,19 +43,28 @@ Whether you notice and pause on destructive or hard-to-reverse operations
 (force pushes, `rm -rf`, schema-altering migrations). The proctor logs
 any destructive command and the pause/confirm interval.
 
+### 7. Multi-agent orchestration away from the keyboard
+How you delegate work across multiple AI agents and manage them while
+not actively driving — spinning up parallel agents or subagents, scoping
+each delegated task, and stepping away while they run. The proctor
+records a tally (agents launched, tasks delegated, time spent hands-off)
+and a narrative on how you scoped the work, whether the agents' outputs
+integrated cleanly or conflicted, and how you reviewed and verified the
+delegated work when you returned.
+
 ## Outcome dimensions — what you produced
 
 These describe the final state of your repo at the end of the time-box.
 
-### 7. Architectural quality
+### 8. Architectural quality
 A narrative observation on modularity, naming, and separation of concerns
 in the final code.
 
-### 8. Test pass / spec satisfaction
+### 9. Test pass / spec satisfaction
 Whether the submission passes the acceptance tests for the project.
 Recorded as pass/fail per criterion.
 
-### 9. Throughput
+### 10. Throughput
 How you paced the work — time-to-first-passing-test, total elapsed time,
 commit cadence. Recorded as raw timestamps and durations.
 
@@ -73,8 +82,8 @@ The proctor observes:
 The proctor does not observe:
 
 - Anything outside this repository or the proctored session window.
-- Audio or video beyond what the consent form signed at session start
-  authorizes.
+- Audio or video beyond what the privacy policy — acknowledged verbally
+  at session start; no signature is required — authorizes.
 - Comparisons with other candidates. Each candidate is evaluated
   independently.
 - The interviewer's verbal commentary as evidence about you — interviewer
@@ -92,5 +101,5 @@ The proctor does not observe:
   shared infrastructure outside the candidate's sandbox.
 - Tooling note: the proctor may capture timestamps from screen recording
   or terminal scrollback after the session to ground Dimensions 4, 6, and
-  9. They do not infer intent from a recording — only the live session
+  10. They do not infer intent from a recording — only the live session
   counts as observation.
